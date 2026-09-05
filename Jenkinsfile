@@ -31,9 +31,21 @@ pipeline {
                     steps {
                         // Unit tests with Vitest
                         sh 'npm ci'
-                        sh 'npm run build' 
+                 9       sh 'npm run build' 
 
                         sh 'npx vitest run --reporter=verbose'
+                    }
+                }
+
+                 stage('integration tests') {
+                    agent {
+                        docker {
+                            image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
+                            reuseNode true
+                        }
+                    }
+                    steps {
+                        sh 'npx playwright test'
                     }
                 }
             }
