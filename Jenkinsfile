@@ -31,7 +31,7 @@ pipeline {
                     steps {
                         // Unit tests with Vitest
                         sh 'npm ci'
-                 9       sh 'npm run build' 
+                       sh 'npm run build' 
 
                         sh 'npx vitest run --reporter=verbose'
                     }
