@@ -1,16 +1,17 @@
 import { defineConfig, devices } from '@playwright/test';
 
 // Only baseURL is overridable; defaults to localhost:8080
-const baseURL = process.env.E2E_BASE_URL || 'http://localhost:8080';
-const slowMo = process.env.SLOW_MO ? Number(process.env.SLOW_MO) : 0;
+const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env;
+const baseURL = env?.E2E_BASE_URL || 'http://localhost:8080';
+const slowMo = env?.SLOW_MO ? Number(env.SLOW_MO) : 0;
 const startLocalServer = baseURL === 'http://localhost:8080';
 
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  forbidOnly: !!env?.CI,
+  retries: env?.CI ? 2 : 0,
+  workers: env?.CI ? 1 : undefined,
   reporter: [
     ['list'],
     ['junit', { outputFile: 'reports-e2e/junit.xml' }],
